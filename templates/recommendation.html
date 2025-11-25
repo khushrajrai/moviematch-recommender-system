@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>MovieMatch : Personalized Recommendations</title>
+    <link rel="icon" href="/static/favicon.png" />
+    <style>
+        :root {
+            --bg: #07060a;
+            --panel: #0f0b13;
+            --muted: #9aa0b4;
+            --accent: #7b3cff;
+            --accent-2: #5a2bd6;
+            --txt: #e6e7ee;
+            --card: #101014;
+            --radius: 12px;
+            font-family: Inter, system-ui, Segoe UI, Roboto, Helvetica, Arial;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            background: linear-gradient(180deg, var(--bg), #050406);
+            color: var(--txt);
+        }
+
+        .site-wrap {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 18px;
+        }
+
+        /* Navbar */
+        .nav-wrap {
+            background: linear-gradient(90deg, rgba(123, 60, 255, 0.06),
+                    rgba(90, 43, 214, 0.03));
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--txt);
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            margin-left: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+
+        .nav-links a:hover {
+            color: var(--txt);
+            background: rgba(123, 60, 255, 0.15);
+        }
+
+        /* Form */
+        .search-box {
+            background: var(--panel);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .search-box h1 {
+            margin-top: 0;
+            font-size: 26px;
+            color: #d3b9ff;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            background: #1a1720;
+            color: var(--txt);
+            font-size: 15px;
+        }
+
+        button {
+            margin-left: 10px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            padding: 11px 18px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Grid */
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .movie-card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02),
+                    rgba(255, 255, 255, 0.03));
+            border-radius: 12px;
+            padding: 10px;
+            min-height: 340px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .poster-wrap {
+            width: 100%;
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0d0b11;
+        }
+
+        .poster-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .input-movie {
+            padding: 9px;
+            border-radius: 7px;
+        }
+
+        .placeholder {
+            color: var(--muted);
+            font-weight: 600;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .movies-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Responsive Navbar --- */
+        @media (max-width: 600px) {
+
+            .nav-inner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .brand {
+                font-size: 18px;
+            }
+
+            .nav-links {
+                width: 100%;
+                display: flex;
+                justify-content: space-around;
+                padding-top: 5px;
+            }
+
+            .nav-links a {
+                margin-left: 0;
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .movies-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            input[type="text"] {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="site-wrap">
+
+        <!-- Navbar -->
+        <header class="nav-wrap">
+            <div class="nav-inner">
+                <div class="brand">🎬 MovieMatch</div>
+                <div class="nav-links">
+                    <a href="/">Home</a>
+                    <a href="/recommendation">Recommendations</a>
+                    <a href="/about">About</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Search Form -->
+        <section class="search-box">
+            <h1>Movie Recommendation System</h1>
+
+            <form action="/recommend_books" method="POST">
+                <input class="input-movie" list="movie-list" name="movie_name" placeholder="Enter movie name..."
+                    required>
+                <datalist id="movie-list">
+                    {% for t in titles %}
+                    <option value="{{ t }}"></option>
+                    {% endfor %}
+                </datalist>
+
+                <button type="submit">Recommend</button>
+            </form>
+
+            {% if error %}
+            <p style="color:#ff6b6b;font-weight:600;margin-top:10px;">⚠️ {{ error }}</p>
+            {% endif %}
+        </section>
+
+        <!-- Results -->
+        {% if results %}
+        <h2 style="color:#d3b9ff;margin-top:10px;">Recommended Movies</h2>
+
+        <section class="movies-grid">
+            {% for item in results %}
+            <div class="movie-card">
+                <div class="poster-wrap">
+                    {% if item.poster %}
+                    <img class="poster-img" src="{{ item.poster }}" alt="{{ item.title }}"
+                        onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                    {% else %}
+                    <div class="placeholder">No Image<br>{{ item.title }}</div>
+                    {% endif %}
+                    <div class="placeholder" style="display:none;">No Image<br>{{ item.title }}</div>
+                </div>
+                <div class="movie-title" style="margin-top:10px;">{{ item.title }}</div>
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+    </div>
+</body>
+
+</html>

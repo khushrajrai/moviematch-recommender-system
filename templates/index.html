@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>MovieMatch : Top 50 Movies</title>
+    <link rel="icon" href="/static/favicon.png" />
+    <style>
+        /*Theme*/
+        :root {
+            --bg: #07060a;
+            --panel: #0f0b13;
+            --muted: #9aa0b4;
+            --accent: #7b3cff;
+            --accent-2: #5a2bd6;
+            --txt: #e6e7ee;
+            --card: #101014;
+            --radius: 12px;
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            background: linear-gradient(180deg, var(--bg), #050406);
+            color: var(--txt);
+        }
+
+        .site-wrap {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 18px;
+        }
+
+        /* Navbar */
+        .nav-wrap {
+            background: linear-gradient(90deg, rgba(123, 60, 255, 0.06), rgba(90, 43, 214, 0.03));
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .brand {
+            font-weight: 700;
+            color: var(--txt);
+            font-size: 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: var(--txt);
+            background: linear-gradient(90deg, rgba(123, 60, 255, 0.14), rgba(90, 43, 214, 0.08));
+        }
+
+        /* Heading */
+        .heading {
+            font-size: 28px;
+            margin: 8px 0;
+            color: #d3b9ff;
+        }
+
+        /* Grid */
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-top: 18px;
+        }
+
+        .movie-card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.02));
+            border-radius: 12px;
+            padding: 10px;
+            min-height: 360px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+        }
+
+        .poster-wrap {
+            width: 100%;
+            height: 340px;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #0b0810, #0c0712);
+            position: relative;
+        }
+
+        .poster-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            font-weight: 600;
+            padding: 20px;
+        }
+
+        .movie-title {
+            margin-top: 10px;
+            font-weight: 700;
+            color: var(--txt);
+            font-size: 15px;
+        }
+
+        .meta {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        /* cta */
+        .cta {
+            margin: 26px 0;
+            padding: 18px;
+            border-radius: 12px;
+            text-align: center;
+            background: linear-gradient(90deg, rgba(123, 60, 255, 0.04), rgba(90, 43, 214, 0.02));
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            color: white;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(91, 41, 210, 0.18);
+        }
+
+        /* Responsive */
+        /* Responsive Navbar */
+        @media (max-width: 600px) {
+
+            .nav-inner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .brand {
+                font-size: 18px;
+            }
+
+            .nav-links {
+                width: 100%;
+                display: flex;
+                justify-content: space-around;
+                padding-top: 5px;
+            }
+
+            .nav-links a {
+                margin-left: 0;
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width:1000px) {
+            .movies-grid {
+                grid-template-columns: repeat(3, 1fr)
+            }
+        }
+
+        @media (max-width:700px) {
+            .movies-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .poster-wrap {
+                height: 280px
+            }
+        }
+
+        @media (max-width:420px) {
+            .movies-grid {
+                grid-template-columns: repeat(1, 1fr)
+            }
+            .poster-wrap {
+                height: 220px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="site-wrap">
+        <header class="nav-wrap">
+            <div class="nav-inner">
+                <div class="brand">🎬 MovieMatch</div>
+                <nav class="nav-links">
+                    <a href="/">Home</a>
+                    <a href="/recommendation">Recommendations</a>
+                    <a href="/about">About</a>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <h1 class="heading">Top 50 Movies of All Time</h1>
+
+            <section class="movies-grid">
+                {% set n = title|length if title is defined else 0 %}
+                {% for i in range(n) %}
+                <article class="movie-card">
+                    <div class="poster-wrap">
+                        {% if posters is defined and posters[i] %}
+                        <img class="poster-img" src="{{ posters[i] }}" alt="{{ title[i] }} poster"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                        <div class="placeholder" style="display:none">
+                            <div style="font-size:18px;">No image</div>
+                            <div style="font-size:12px;color:var(--muted);margin-top:6px;">{{ title[i] }}</div>
+                        </div>
+                        {% else %}
+                        <div class="placeholder">
+                            <div style="font-size:18px;">No image</div>
+                            <div style="font-size:12px;color:var(--muted);margin-top:6px;">{{ title[i] }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="movie-title">{{ title[i] }}</div>
+                    <div class="meta">Total Votes: {{ votes[i] | default('N/A') }} · Rating: {{ rating[i] |
+                        default('N/A') }} ⭐</div>
+                </article>
+                {% endfor %}
+            </section>
+
+            <div class="cta">
+                <h3 style="margin:0 0 8px 0">Want personalized recommendations?</h3>
+                <button class="btn-primary" onclick="location.href='/recommendation'">Recommend</button>
+            </div>
+        </main>
+
+        <footer style="color:var(--muted);text-align:center;padding:18px 0">MovieMatch · Posters via OMDB API</footer>
+    </div>
+</body>
+
+</html>

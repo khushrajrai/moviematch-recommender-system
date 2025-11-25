@@ -7,10 +7,22 @@ import os
 load_dotenv()
 OMDB_API_KEY = os.getenv("OMDB_API_KEY")
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+similarity_path = os.path.join(BASE_DIR, "models", "similarity_score.pkl")
+pivot_path = os.path.join(BASE_DIR, "models", "final_pivot_table.pkl")
+
+with open(similarity_path, "rb") as f:
+    similarity_score = pickle.load(f)
+
+with open(pivot_path, "rb") as f:
+    final_pivot_table = pickle.load(f)
+
+
 final_popular_df = pickle.load(open('models/final_popular_df.pkl','rb'))
-final_pivot_table = pickle.load(open('models/final_pivot_table.pkl','rb'))
+# final_pivot_table = pickle.load(open('models/final_pivot_table.pkl','rb'))
 updated_movie_df = pickle.load(open('models/updated_movie_df.pkl','rb'))
-similarity_score = pickle.load(open('models/similarity_score.pkl','rb'))
+# similarity_score = pickle.load(open('models/similarity_score.pkl','rb'))
 
 app = Flask(__name__)
 

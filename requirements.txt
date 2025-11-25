@@ -2,11 +2,8 @@ Flask
 gunicorn
 pandas
 numpy
-<<<<<<< HEAD
 scikit-learn
 requests
 python-dotenv
-=======
-python-dotenv
-pandas
->>>>>>> 5a26ef523607e92daa2df319d4cb60c2f766fc72
+
+

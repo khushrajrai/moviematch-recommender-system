@@ -1,11 +1,11 @@
 from flask import Flask, request, jsonify, render_template
 import pickle
 import requests
-from dotenv import load_dotenv
-import os
 
+from dotenv import load_dotenv
 load_dotenv()
-OMDB_API_KEY = os.getenv("OMDB_API_KEY")
+import os
+api_key = os.getenv("OMDB_API_KEY")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -140,3 +140,5 @@ def recommend():
 if __name__ == "__main__":
     
     app.run(debug=True)
+
+

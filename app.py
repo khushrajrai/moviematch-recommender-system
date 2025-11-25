@@ -2,8 +2,10 @@ from flask import Flask, request, jsonify, render_template
 import pickle
 import requests
 
-import streamlit as st
-api_key = st.secrets["OMDB_API_KEY"]
+from dotenv import load_dotenv
+load_dotenv()
+import os
+api_key = os.getenv("OMDB_API_KEY")
 
 final_popular_df = pickle.load(open('models/final_popular_df.pkl','rb'))
 final_pivot_table = pickle.load(open('models/final_pivot_table.pkl','rb'))
@@ -126,4 +128,5 @@ def recommend():
 if __name__ == "__main__":
     
     app.run(debug=True)
+
 

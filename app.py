@@ -3,6 +3,7 @@ import pickle
 import requests
 
 from dotenv import load_dotenv
+poster_cache = {}
 load_dotenv()
 import os
 OMDB_API_KEY = os.getenv("OMDB_API_KEY")
@@ -41,18 +42,24 @@ def fetch_poster_imdb(imdb_id):
     """Server-side OMDB call to get poster URL. Returns None if not available."""
     if not imdb_id:
         return None
+    # IN-MEMORY CACHE CHECK
+    if imdb_id in poster_cache:
+        return poster_cache[imdb_id]
     try:
         url = f"https://www.omdbapi.com/?i={imdb_id}&apikey={OMDB_API_KEY}"
         resp = requests.get(url, timeout=6)
         if resp.status_code != 200:
+            poster_cache[imdb_id] = None
             return None
         data = resp.json()
         if data.get("Response") == "True":
             poster = data.get("Poster")
             if poster and poster != "N/A":
+                poster_cache[imdb_id] = poster
                 return poster
     except Exception as e:
         app.logger.debug("OMDB fetch error %s -> %s", imdb_id, e)
+        poster_cache[imdb_id] = None
     return None
 
 @app.route('/about')
@@ -140,6 +147,7 @@ def recommend():
 if __name__ == "__main__":
     
     app.run(debug=True)
+
 
 
 
